@@ -1,0 +1,7 @@
+# Pin the workspace to current stable so local builds don't pick up the
+# machine default (often nightly). MSRV is 1.89 (see turbovec/Cargo.toml);
+# CI's clippy job is pinned to 1.97.0. `stable` tracks the same train.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy", "rust-analyzer"]
+profile = "default"

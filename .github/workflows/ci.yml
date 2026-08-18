@@ -246,8 +246,9 @@ jobs:
           set -euo pipefail
           v=$(grep -m1 '^rust-version' turbovec/Cargo.toml | cut -d'"' -f2)
           py=$(grep -m1 '^rust-version' turbovec-python/Cargo.toml | cut -d'"' -f2)
-          if [ "$v" != "$py" ]; then
-            echo "::error::turbovec declares MSRV $v but turbovec-python declares $py"
+          go=$(grep -m1 '^rust-version' turbovec-go/Cargo.toml | cut -d'"' -f2)
+          if [ "$v" != "$py" ] || [ "$v" != "$go" ]; then
+            echo "::error::MSRV mismatch: turbovec=$v turbovec-python=$py turbovec-go=$go"
             exit 1
           fi
           echo "version=$v" >> "$GITHUB_OUTPUT"
@@ -256,10 +257,37 @@ jobs:
       - name: Install the declared toolchain
         run: rustup toolchain install ${{ steps.msrv.outputs.version }} --profile minimal
 
-      - name: Build both packages on it
+      - name: Build all packages on it
         run: |
           cargo +${{ steps.msrv.outputs.version }} check -p turbovec --locked --all-targets
           cargo +${{ steps.msrv.outputs.version }} check -p turbovec-python --locked
+          cargo +${{ steps.msrv.outputs.version }} check -p turbovec-go --locked
+
+  go:
+    name: Go (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-14]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: "1.22.x"
+          cache-dependency-path: turbovec-go/go.mod
+
+      - name: Build native library
+        run: cargo build -p turbovec-go --release --locked
+
+      - name: go test
+        working-directory: turbovec-go
+        env:
+          CGO_ENABLED: "1"
+        run: go test -count=1 ./...
 
   # Cross-OS encode fingerprint (#259). The rotation is deterministic by
   # construction, the per-vector norm has a frozen reduction order, and

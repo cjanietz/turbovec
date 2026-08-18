@@ -4,12 +4,22 @@ All notable changes to turbovec are recorded here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The Rust crate (`turbovec` on crates.io) and the Python distribution
-(`turbovec` on PyPI) version independently. Each release section below
-is split by surface — a single feature can affect both, and its bullet
-appears under each surface it touches.
+The Rust crate (`turbovec` on crates.io), the Python distribution
+(`turbovec` on PyPI), and the Go module (`turbovec-go`) version
+independently. Each release section below is split by surface — a
+single feature can affect more than one, and its bullet appears under
+each surface it touches.
 
 ## [Unreleased]
+
+### turbovec-go — Go module (new)
+
+- **Go bindings for `TurboQuantIndex` and `IdMapIndex`.** The in-tree
+  module `github.com/RyanCodrai/turbovec/turbovec-go` wraps the core
+  crate through UniFFI. Vectors are a flat `[]float32` plus `dim`
+  (the same shape as Rust `add_2d` / `try_search`). Concurrent
+  `Search` is safe; mutations take a write lock. Build the native
+  library with `cargo build -p turbovec-go --release` before `go test`.
 
 ## turbovec 1.0.0 (Python package) + turbovec 1.0.0 (Rust crate) — 2026-08-18
 

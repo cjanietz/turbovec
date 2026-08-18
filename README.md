@@ -13,7 +13,7 @@
 
 **A 10 million document corpus takes 31 GB of RAM as float32. turbovec fits it in 4 GB - and searches it faster than FAISS.**
 
-turbovec is a Rust vector index with Python bindings, built on Google Research's [**TurboQuant**](https://arxiv.org/abs/2504.19874) algorithm — a data-oblivious quantizer with near-optimal distortion and no separate training phase.
+turbovec is a Rust vector index with Python and Go bindings, built on Google Research's [**TurboQuant**](https://arxiv.org/abs/2504.19874) algorithm — a data-oblivious quantizer with near-optimal distortion and no separate training phase.
 
 - **Online ingest.** Add vectors, they're indexed — no train step, no parameter tuning, no rebuilds as the corpus grows.
 - **Fast SIMD search.** Hand-written kernels — NEON SDOT/SMMLA on ARM, AVX-512 VNNI and `vpermb` on x86, with AVX2 and scalar fallbacks — beat FAISS IndexPQFastScan in every measured config, averaging 3.4× at 4-bit and 23% at 2-bit across the eight cells of each width, on both architectures.
@@ -127,6 +127,26 @@ index.write("index.tvim").unwrap();
 let loaded = IdMapIndex::load("index.tvim").unwrap();
 ```
 
+## Go
+
+```bash
+cargo build -p turbovec-go --release
+cd turbovec-go && go test
+```
+
+```go
+import "github.com/RyanCodrai/turbovec/turbovec-go"
+
+idx, err := turbovec.NewTurboQuantIndex(1536, 4)
+if err != nil { log.Fatal(err) }
+if err := idx.Add(vectors, 1536); err != nil { log.Fatal(err) }
+res, err := idx.Search(query, 1536, 10)
+```
+
+`vectors` and `query` are flat little-endian `[]float32` of length `n * dim`.
+Need stable ids? Use `NewIdMapIndex` and `AddWithIDs`. See
+[`turbovec-go/README.md`](turbovec-go/README.md) for linking the native library.
+
 ## Recall
 
 TurboQuant vs FAISS `IndexPQ` (LUT256, nbits=8) — the paper's Section 4.4 baseline. 100K vectors, k=64. FAISS PQ sub-quantizer counts sized to match TurboQuant's bit rate (m=d/4 at 2-bit, m=d/2 at 4-bit).
@@ -231,20 +251,35 @@ The Lloyd-Max codebook achieves distortion within a factor of 2.7x of the inform
 
 ## Building
 
-### Python (via maturin)
-
-```bash
-pip install maturin
-cd turbovec-python
-maturin build --release
-pip install target/wheels/*.whl
-```
+A `rust-toolchain.toml` at the repo root pins **stable** (currently 1.97.x) so a machine whose default is nightly still builds. MSRV is 1.89.
 
 ### Rust
 
 ```bash
 cargo build --release
+cargo test -p turbovec --locked --lib   # unit tests
+# Integration suites (skip io_v6 in debug: the codebook solve is too slow unoptimized)
+cargo test -p turbovec --locked --release   # matches CI; LTO makes the first compile slow
 ```
+
+### Python (via maturin)
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install maturin pytest
+cd turbovec-python
+maturin develop --release --locked
+pytest tests/ -v
+```
+
+Integration suites (LangChain, LlamaIndex, Haystack, Agno) skip unless those extras are installed:
+
+```bash
+pip install -e "./turbovec-python[langchain,llama-index,haystack,agno]"
+```
+
+`cargo test -p turbovec-python --lib --no-default-features --locked` needs a Python interpreter on the link line (pyo3's `extension-module` feature is off).
 
 All x86_64 builds target `x86-64-v2` (SSE4.2 baseline, Nehalem 2008+) via `.cargo/config.toml`, so any x86-64-v2 CPU can run the whole crate. The AVX-512 and AVX2 kernels are `#[target_feature]`-gated and selected at runtime via `is_x86_feature_detected!`, so they kick in on hardware that supports them regardless of the compile baseline; CPUs with neither run the scalar fallback.
 

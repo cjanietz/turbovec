@@ -28,3 +28,4 @@ For recall or speed changes, include before/after numbers.
 
 - [ ] `cargo test -p turbovec --release` passes
 - [ ] `pytest turbovec-python/tests/` passes
+- [ ] `cargo build -p turbovec-go --release && (cd turbovec-go && go test)` passes

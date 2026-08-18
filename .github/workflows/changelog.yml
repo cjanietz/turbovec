@@ -32,7 +32,8 @@ jobs:
       # two new public items, a new load-rejection class, and a removed
       # importable module. Nothing enforced it, so it depended on whoever
       # wrote the PR remembering. The gate only looks at shipped files
-      # (turbovec/src, turbovec-python/src, the shipped Python package) and
+      # (turbovec/src, turbovec-python/src, the shipped Python package,
+      # turbovec-go/src and the public Go wrappers) and
       # only at lines that are not comments or blanks, so a comment sweep or
       # a test-only change does not trip it. See CONTRIBUTING.md for the
       # escape hatch.

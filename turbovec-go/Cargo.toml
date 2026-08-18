@@ -1,0 +1,21 @@
+[package]
+name = "turbovec-go"
+version = "1.0.0"
+edition = "2021"
+# Kept in lockstep with turbovec's `rust-version` — the `msrv` leg in ci.yml
+# fails if the manifests disagree. The AVX-512 kernels in turbovec set the
+# floor; uniffi 0.31's own MSRV is 1.85 and does not raise it.
+rust-version = "1.89"
+publish = false
+description = "UniFFI scaffolding for the turbovec Go bindings"
+license = "MIT"
+repository = "https://github.com/RyanCodrai/turbovec"
+
+[lib]
+name = "turbovec_go"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+turbovec-core = { package = "turbovec", path = "../turbovec" }
+uniffi = "0.31"
+thiserror = "2"

@@ -16,6 +16,10 @@ Scope. Only files that ship, or that describe what ships:
     ``turbovec-python/pyproject.toml`` — features, MSRV, ``requires-python``,
     extras and dependency floors are all user-visible packaging surface, and
     "a new cargo feature" was one of the four misses this gate exists for.
+  * ``turbovec-go/src/**.rs``, ``turbovec-go/Cargo.toml``, and the public
+    Go wrappers (``index.go``, ``idmap.go``, ``conv.go``, ``results.go``,
+    ``warning.go``). Generated UniFFI scaffolding under
+    ``internal/uniffi/`` is not gated.
 
 Within those it ignores two kinds of change:
 
@@ -69,6 +73,9 @@ SURFACE_PATTERNS = (
     re.compile(r"^turbovec/Cargo\.toml$"),
     re.compile(r"^turbovec-python/Cargo\.toml$"),
     re.compile(r"^turbovec-python/pyproject\.toml$"),
+    re.compile(r"^turbovec-go/src/.*\.rs$"),
+    re.compile(r"^turbovec-go/Cargo\.toml$"),
+    re.compile(r"^turbovec-go/(index|idmap|conv|results|warning)\.go$"),
 )
 
 # Files that match a surface pattern but hold only test code. Kept explicit so

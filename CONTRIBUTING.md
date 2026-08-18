@@ -48,6 +48,8 @@ The gate is narrow on purpose. It only looks at:
 - `turbovec/Cargo.toml`, `turbovec-python/Cargo.toml` and
   `turbovec-python/pyproject.toml` — cargo features, MSRV, `requires-python`,
   the extras and the dependency floors are all user-visible packaging surface
+- `turbovec-go/src/**.rs`, `turbovec-go/Cargo.toml`, and the public Go
+  wrappers (`index.go`, `idmap.go`, `conv.go`, `results.go`, `warning.go`)
 
 and within those it ignores two kinds of change: comments and blank lines, and
 anything inside a `#[cfg(test)]` region. So a comment sweep doesn't trip it,
@@ -56,8 +58,8 @@ workflow we want, not one to tax. Tests, benchmarks, examples, docs and
 workflows are out of scope entirely.
 
 Write the entry under `## [Unreleased]`, under the surface it affects — the
-Rust crate and the Python distribution version independently and each has its
-own subsection. Describe the change as a user experiences it, and reference the
+Rust crate, the Python distribution and the Go module version independently
+and each has its own subsection. Describe the change as a user experiences it, and reference the
 issue. The gate checks that the diff actually *added* a non-blank line under
 `## [Unreleased]`; touching the file is not enough.
 
