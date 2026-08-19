@@ -1,6 +1,6 @@
 package turbovec
 
-import "github.com/RyanCodrai/turbovec/turbovec-go/internal/uniffi"
+import "github.com/cjanietz/turbovec/turbovec-go/internal/uniffi"
 
 // IdMapIndex is a TurboQuantIndex with stable external uint64 ids.
 type IdMapIndex struct {

@@ -4,7 +4,7 @@ Go bindings for [turbovec](https://github.com/RyanCodrai/turbovec). The public
 package is `turbovec`; import it as:
 
 ```go
-import "github.com/RyanCodrai/turbovec/turbovec-go"
+import "github.com/cjanietz/turbovec/turbovec-go"
 ```
 
 64-bit hosts only (`amd64` / `arm64`), matching the core crate.

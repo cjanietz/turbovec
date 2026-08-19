@@ -135,7 +135,7 @@ cd turbovec-go && go test
 ```
 
 ```go
-import "github.com/RyanCodrai/turbovec/turbovec-go"
+import "github.com/cjanietz/turbovec/turbovec-go"
 
 idx, err := turbovec.NewTurboQuantIndex(1536, 4)
 if err != nil { log.Fatal(err) }

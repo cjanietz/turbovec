@@ -1,6 +1,6 @@
 package turbovec
 
-import "github.com/RyanCodrai/turbovec/turbovec-go/internal/uniffi"
+import "github.com/cjanietz/turbovec/turbovec-go/internal/uniffi"
 
 // TurboQuantIndex is a positional TurboQuant index. Each vector is
 // identified by its insertion slot; swap-remove invalidates later slots.

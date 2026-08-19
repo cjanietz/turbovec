@@ -1,3 +1,3 @@
-module github.com/RyanCodrai/turbovec/turbovec-go
+module github.com/cjanietz/turbovec/turbovec-go
 
 go 1.22

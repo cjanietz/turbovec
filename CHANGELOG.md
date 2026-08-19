@@ -15,7 +15,7 @@ each surface it touches.
 ### turbovec-go — Go module (new)
 
 - **Go bindings for `TurboQuantIndex` and `IdMapIndex`.** The in-tree
-  module `github.com/RyanCodrai/turbovec/turbovec-go` wraps the core
+  module `github.com/cjanietz/turbovec/turbovec-go` wraps the core
   crate through UniFFI. Vectors are a flat `[]float32` plus `dim`
   (the same shape as Rust `add_2d` / `try_search`). Concurrent
   `Search` is safe; mutations take a write lock. Build the native

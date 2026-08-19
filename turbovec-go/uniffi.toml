@@ -1,4 +1,4 @@
 [bindings.go]
 package_name = "uniffi"
 cdylib_name = "turbovec_go"
-go_mod = "github.com/RyanCodrai/turbovec/turbovec-go"
+go_mod = "github.com/cjanietz/turbovec/turbovec-go"

@@ -1,7 +1,7 @@
 package turbovec
 
 import (
-	"github.com/RyanCodrai/turbovec/turbovec-go/internal/uniffi"
+	"github.com/cjanietz/turbovec/turbovec-go/internal/uniffi"
 )
 
 // WarningHandler receives non-fatal diagnostics (for example a durable

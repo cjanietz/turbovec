@@ -7,7 +7,7 @@ turbovec exposes two index types and one serialization format per type.
 - [TQ+ calibration](#tq-calibration) — the per-coordinate calibration lifecycle.
 - [File formats](#file-formats) — `.tv` and `.tvim`, plus [incremental saves](#incremental-saves--sync).
 
-All examples below are Python. The Rust API mirrors it closely (exceptions noted below) — see each type's rustdoc for the exact signatures. The Go module `github.com/RyanCodrai/turbovec/turbovec-go` is the same surface with flat `[]float32` plus `dim`, matching Rust `add_2d` / `calibrate_2d` / `try_search` rather than Python's 2-D arrays.
+All examples below are Python. The Rust API mirrors it closely (exceptions noted below) — see each type's rustdoc for the exact signatures. The Go module `github.com/cjanietz/turbovec/turbovec-go` is the same surface with flat `[]float32` plus `dim`, matching Rust `add_2d` / `calibrate_2d` / `try_search` rather than Python's 2-D arrays.
 
 ---
 
